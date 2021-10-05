@@ -6,9 +6,9 @@ import matplotlib.pyplot as pi
 
 #Defining a function which converts the image into required format for Lane Detection
 def Lanedetect(lane_image):
-    #Initially we convert the image to Gray scale
+    #Initially we convert the image to Grayscale
     gray = cv2.cvtColor(lane_image,cv2.COLOR_BGR2GRAY)
-    #Here we use blurr to reduce the noise in the image
+    #Here we use blur to reduce the noise in the image
     blur = cv2.GaussianBlur(gray, (5,5), 0)
     #Then we perform edge detection using the Canny function
     #After edge detection we then find the Region of interest
@@ -22,7 +22,7 @@ def coordinate(image,lines):
     print(intercept)
     y1 = image.shape[0]
     #Here the length of the line is about 3/5 of the height of the image
-		#The value 3/5th can be changed depending on the length of the line to be displayed.
+    #The value 3/5th can be changed depending on the length of the line to be displayed
     y2 = int(y1*(3/5))
     x1 = int((y1 - intercept)/slope)
     x2 = int((y2 - intercept)/slope)
@@ -30,7 +30,7 @@ def coordinate(image,lines):
     
     return np.array([x1,y1,x2,y2])
 
-#Definig the function to find all the obtained slopes(+Ve & -Ve) and passing the slopes to coordinate function
+#Defining the function to find all the obtained slopes(+Ve & -Ve) and passing the slopes to coordinate function
 def avg_slp_intercept(image,lines):
     #Left fit are the slopes less that zero
     left_fit = []
@@ -63,7 +63,7 @@ def avg_slp_intercept(image,lines):
     
     return np.array([left_line,right_line])
     
-#To draw a single striaght of the lane from the obtained points from avg_slp_intercept function       
+#To draw a single straight of the lane from the obtained points from avg_slp_intercept function       
 def merged(image,lines):
     image_blank = np.zeros_like(image)
     if lines is not None:
@@ -101,8 +101,8 @@ while vid.isOpened() == True:
     #In order to get a single straight line we find the avg
     slope = avg_slp_intercept(lane_image,lines)
     lines_display = merged(lane_image,slope)
-    #At last we display the lines on the image use a function addWeighted
-    #That is simply used to imrove the contrast on the image wrt to the lane lines
+    #At last we display the lines on the image by using a function addWeighted
+    #That is simply used to improve the contrast on the image wrt to the lane lines
     final_image = cv2.addWeighted(image, 0.8,lines_display , 10, 1)
     #Displaying the final Image.
     cv2.imshow('The image',final_image)
